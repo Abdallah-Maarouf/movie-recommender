@@ -1,0 +1,39 @@
+{
+  "total_movies": 3883,
+  "movies_with_ratings": 3706,
+  "movies_with_sufficient_ratings": 2019,
+  "movies_with_high_ratings": 207,
+  "avg_ratings_per_movie": 257.5866597991244,
+  "median_ratings_per_movie": 109.0,
+  "rating_distribution": {
+    "4": 348971,
+    "3": 261197,
+    "5": 226310,
+    "2": 107557,
+    "1": 56174
+  },
+  "genre_distribution": {
+    "Drama": 1603,
+    "Comedy": 1200,
+    "Action": 503,
+    "Thriller": 492,
+    "Romance": 471,
+    "Horror": 343,
+    "Adventure": 283,
+    "Sci-Fi": 276,
+    "Children's": 251,
+    "Crime": 211,
+    "War": 143,
+    "Documentary": 127,
+    "Musical": 114,
+    "Mystery": 106,
+    "Animation": 105,
+    "Fantasy": 68,
+    "Western": 68,
+    "Film-Noir": 44
+  },
+  "year_range": {
+    "min_year": 1919,
+    "max_year": 2000
+  }
+}

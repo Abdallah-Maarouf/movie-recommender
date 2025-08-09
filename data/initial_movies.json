@@ -1,0 +1,273 @@
+[
+  {
+    "MovieID": 110,
+    "CleanTitle": "Braveheart",
+    "WebTitle": "Braveheart",
+    "Year": 1995,
+    "GenreList": [
+      "Action",
+      "Drama",
+      "War"
+    ],
+    "rating_count": 2443.0,
+    "avg_rating": 4.235
+  },
+  {
+    "MovieID": 260,
+    "CleanTitle": "Star Wars: Episode IV - A New Hope",
+    "WebTitle": "Star Wars: Episode IV - A New Hope",
+    "Year": 1977,
+    "GenreList": [
+      "Action",
+      "Adventure",
+      "Fantasy",
+      "Sci-Fi"
+    ],
+    "rating_count": 2991.0,
+    "avg_rating": 4.454
+  },
+  {
+    "MovieID": 480,
+    "CleanTitle": "Jurassic Park",
+    "WebTitle": "Jurassic Park",
+    "Year": 1993,
+    "GenreList": [
+      "Action",
+      "Adventure",
+      "Sci-Fi"
+    ],
+    "rating_count": 2672.0,
+    "avg_rating": 3.764
+  },
+  {
+    "MovieID": 527,
+    "CleanTitle": "Schindler's List",
+    "WebTitle": "Schindler&#39;s List",
+    "Year": 1993,
+    "GenreList": [
+      "Drama",
+      "War"
+    ],
+    "rating_count": 2304.0,
+    "avg_rating": 4.51
+  },
+  {
+    "MovieID": 589,
+    "CleanTitle": "Terminator 2: Judgment Day",
+    "WebTitle": "Terminator 2: Judgment Day",
+    "Year": 1991,
+    "GenreList": [
+      "Action",
+      "Sci-Fi",
+      "Thriller"
+    ],
+    "rating_count": 2649.0,
+    "avg_rating": 4.059
+  },
+  {
+    "MovieID": 593,
+    "CleanTitle": "Silence of the Lambs, The",
+    "WebTitle": "Silence of the Lambs, The",
+    "Year": 1991,
+    "GenreList": [
+      "Drama",
+      "Thriller"
+    ],
+    "rating_count": 2578.0,
+    "avg_rating": 4.352
+  },
+  {
+    "MovieID": 608,
+    "CleanTitle": "Fargo",
+    "WebTitle": "Fargo",
+    "Year": 1996,
+    "GenreList": [
+      "Crime",
+      "Drama",
+      "Thriller"
+    ],
+    "rating_count": 2513.0,
+    "avg_rating": 4.255
+  },
+  {
+    "MovieID": 1196,
+    "CleanTitle": "Star Wars: Episode V - The Empire Strikes Back",
+    "WebTitle": "Star Wars: Episode V - The Empire Strikes Back",
+    "Year": 1980,
+    "GenreList": [
+      "Action",
+      "Adventure",
+      "Drama",
+      "Sci-Fi",
+      "War"
+    ],
+    "rating_count": 2990.0,
+    "avg_rating": 4.293
+  },
+  {
+    "MovieID": 1197,
+    "CleanTitle": "Princess Bride, The",
+    "WebTitle": "Princess Bride, The",
+    "Year": 1987,
+    "GenreList": [
+      "Action",
+      "Adventure",
+      "Comedy",
+      "Romance"
+    ],
+    "rating_count": 2318.0,
+    "avg_rating": 4.304
+  },
+  {
+    "MovieID": 1198,
+    "CleanTitle": "Raiders of the Lost Ark",
+    "WebTitle": "Raiders of the Lost Ark",
+    "Year": 1981,
+    "GenreList": [
+      "Action",
+      "Adventure"
+    ],
+    "rating_count": 2514.0,
+    "avg_rating": 4.478
+  },
+  {
+    "MovieID": 1210,
+    "CleanTitle": "Star Wars: Episode VI - Return of the Jedi",
+    "WebTitle": "Star Wars: Episode VI - Return of the Jedi",
+    "Year": 1983,
+    "GenreList": [
+      "Action",
+      "Adventure",
+      "Romance",
+      "Sci-Fi",
+      "War"
+    ],
+    "rating_count": 2883.0,
+    "avg_rating": 4.023
+  },
+  {
+    "MovieID": 1214,
+    "CleanTitle": "Alien",
+    "WebTitle": "Alien",
+    "Year": 1979,
+    "GenreList": [
+      "Action",
+      "Horror",
+      "Sci-Fi",
+      "Thriller"
+    ],
+    "rating_count": 2024.0,
+    "avg_rating": 4.16
+  },
+  {
+    "MovieID": 1270,
+    "CleanTitle": "Back to the Future",
+    "WebTitle": "Back to the Future",
+    "Year": 1985,
+    "GenreList": [
+      "Comedy",
+      "Sci-Fi"
+    ],
+    "rating_count": 2583.0,
+    "avg_rating": 3.99
+  },
+  {
+    "MovieID": 1387,
+    "CleanTitle": "Jaws",
+    "WebTitle": "Jaws",
+    "Year": 1975,
+    "GenreList": [
+      "Action",
+      "Horror"
+    ],
+    "rating_count": 1697.0,
+    "avg_rating": 4.09
+  },
+  {
+    "MovieID": 1580,
+    "CleanTitle": "Men in Black",
+    "WebTitle": "Men in Black",
+    "Year": 1997,
+    "GenreList": [
+      "Action",
+      "Adventure",
+      "Comedy",
+      "Sci-Fi"
+    ],
+    "rating_count": 2538.0,
+    "avg_rating": 3.74
+  },
+  {
+    "MovieID": 2028,
+    "CleanTitle": "Saving Private Ryan",
+    "WebTitle": "Saving Private Ryan",
+    "Year": 1998,
+    "GenreList": [
+      "Action",
+      "Drama",
+      "War"
+    ],
+    "rating_count": 2653.0,
+    "avg_rating": 4.337
+  },
+  {
+    "MovieID": 2396,
+    "CleanTitle": "Shakespeare in Love",
+    "WebTitle": "Shakespeare in Love",
+    "Year": 1998,
+    "GenreList": [
+      "Comedy",
+      "Romance"
+    ],
+    "rating_count": 2369.0,
+    "avg_rating": 4.127
+  },
+  {
+    "MovieID": 2571,
+    "CleanTitle": "Matrix, The",
+    "WebTitle": "Matrix, The",
+    "Year": 1999,
+    "GenreList": [
+      "Action",
+      "Sci-Fi",
+      "Thriller"
+    ],
+    "rating_count": 2590.0,
+    "avg_rating": 4.316
+  },
+  {
+    "MovieID": 2716,
+    "CleanTitle": "Ghostbusters",
+    "WebTitle": "Ghostbusters",
+    "Year": 1984,
+    "GenreList": [
+      "Comedy",
+      "Horror"
+    ],
+    "rating_count": 2181.0,
+    "avg_rating": 3.906
+  },
+  {
+    "MovieID": 2762,
+    "CleanTitle": "Sixth Sense, The",
+    "WebTitle": "Sixth Sense, The",
+    "Year": 1999,
+    "GenreList": [
+      "Thriller"
+    ],
+    "rating_count": 2459.0,
+    "avg_rating": 4.406
+  },
+  {
+    "MovieID": 2858,
+    "CleanTitle": "American Beauty",
+    "WebTitle": "American Beauty",
+    "Year": 1999,
+    "GenreList": [
+      "Comedy",
+      "Drama"
+    ],
+    "rating_count": 3428.0,
+    "avg_rating": 4.317
+  }
+]
