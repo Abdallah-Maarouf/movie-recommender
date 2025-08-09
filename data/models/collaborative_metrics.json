@@ -1,0 +1,11 @@
+{
+  "svd_training_time": 1.854956865310669,
+  "svd_explained_variance": 0.33997194616969917,
+  "similarity_computation_time": 4.905098915100098,
+  "svd_rmse": 2.4406111992398967,
+  "svd_mae": 2.1775167908559077,
+  "user_based_rmse": 0.9961439252741492,
+  "user_based_mae": 0.7873490202770981,
+  "item_based_rmse": 0.9394730707948115,
+  "item_based_mae": 0.7269005491117915
+}
