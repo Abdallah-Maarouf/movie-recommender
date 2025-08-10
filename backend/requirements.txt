@@ -11,6 +11,7 @@ scipy==1.11.4
 
 # Data validation and serialization
 pydantic==2.5.0
+pydantic-settings==2.1.0
 
 # HTTP client for external APIs
 httpx==0.25.2
