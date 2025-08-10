@@ -1,0 +1,7 @@
+{
+  "content_based": "Because you liked {similar_movies}",
+  "collaborative": "Users with similar tastes also enjoyed this movie",
+  "hybrid": "Recommended based on your preferences and similar users",
+  "popular": "Popular movie with high ratings",
+  "cold_start": "Trending movie you might enjoy"
+}

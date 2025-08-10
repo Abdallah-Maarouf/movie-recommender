@@ -1,0 +1,402 @@
+[
+  {
+    "movie_id": 2018,
+    "title": "Peter Pan (1953)",
+    "genres": "Animation|Children's|Fantasy|Musical",
+    "avg_rating": 4.56,
+    "rating_count": 628.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 317,
+    "title": "Suture (1993)",
+    "genres": "Film-Noir|Thriller",
+    "avg_rating": 4.55,
+    "rating_count": 2227.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 857,
+    "title": "Death in Brunswick (1991)",
+    "genres": "Comedy",
+    "avg_rating": 4.52,
+    "rating_count": 2223.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 49,
+    "title": "Usual Suspects, The (1995)",
+    "genres": "Crime|Thriller",
+    "avg_rating": 4.52,
+    "rating_count": 1783.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 744,
+    "title": "Gold Diggers: The Secret of Bear Mountain (1995)",
+    "genres": "Adventure|Children's",
+    "avg_rating": 4.52,
+    "rating_count": 657.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 526,
+    "title": "Second Best (1994)",
+    "genres": "Drama",
+    "avg_rating": 4.51,
+    "rating_count": 2304.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1147,
+    "title": "Mina Tannenbaum (1994)",
+    "genres": "Drama",
+    "avg_rating": 4.51,
+    "rating_count": 882.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 921,
+    "title": "To Catch a Thief (1955)",
+    "genres": "Comedy|Romance|Thriller",
+    "avg_rating": 4.49,
+    "rating_count": 470.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1197,
+    "title": "Army of Darkness (1993)",
+    "genres": "Action|Adventure|Comedy|Horror|Sci-Fi",
+    "avg_rating": 4.48,
+    "rating_count": 2514.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 903,
+    "title": "Sabrina (1954)",
+    "genres": "Comedy|Romance",
+    "avg_rating": 4.48,
+    "rating_count": 1050.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1177,
+    "title": "Up in Smoke (1978)",
+    "genres": "Comedy",
+    "avg_rating": 4.47,
+    "rating_count": 230.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 259,
+    "title": "Little Princess, A (1995)",
+    "genres": "Children's|Drama",
+    "avg_rating": 4.45,
+    "rating_count": 2991.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 749,
+    "title": "Maya Lin: A Strong Clear Vision (1994)",
+    "genres": "Documentary",
+    "avg_rating": 4.45,
+    "rating_count": 1367.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1211,
+    "title": "Annie Hall (1977)",
+    "genres": "Comedy|Romance",
+    "avg_rating": 4.45,
+    "rating_count": 480.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1206,
+    "title": "Henry V (1989)",
+    "genres": "Drama|War",
+    "avg_rating": 4.43,
+    "rating_count": 928.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 719,
+    "title": "Cold Comfort Farm (1995)",
+    "genres": "Comedy",
+    "avg_rating": 4.43,
+    "rating_count": 438.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 3434,
+    "title": "Solaris (Solyaris) (1972)",
+    "genres": "Drama|Sci-Fi",
+    "avg_rating": 4.42,
+    "rating_count": 551.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 2761,
+    "title": "Cabaret Balkan (Bure Baruta) (1998)",
+    "genres": "Drama",
+    "avg_rating": 4.41,
+    "rating_count": 2459.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 911,
+    "title": "Citizen Kane (1941)",
+    "genres": "Drama",
+    "avg_rating": 4.41,
+    "rating_count": 1669.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 912,
+    "title": "2001: A Space Odyssey (1968)",
+    "genres": "Drama|Mystery|Sci-Fi|Thriller",
+    "avg_rating": 4.4,
+    "rating_count": 1043.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1203,
+    "title": "Godfather: Part II, The (1974)",
+    "genres": "Action|Crime|Drama",
+    "avg_rating": 4.4,
+    "rating_count": 831.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 3029,
+    "title": "Natural, The (1984)",
+    "genres": "Drama",
+    "avg_rating": 4.4,
+    "rating_count": 215.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1192,
+    "title": "Star Wars: Episode VI - Return of the Jedi (1983)",
+    "genres": "Action|Adventure|Romance|Sci-Fi|War",
+    "avg_rating": 4.39,
+    "rating_count": 1725.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 922,
+    "title": "Father of the Bride (1950)",
+    "genres": "Comedy",
+    "avg_rating": 4.39,
+    "rating_count": 1116.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1249,
+    "title": "Arsenic and Old Lace (1944)",
+    "genres": "Comedy|Mystery|Thriller",
+    "avg_rating": 4.39,
+    "rating_count": 938.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 3306,
+    "title": "Destination Moon (1950)",
+    "genres": "Sci-Fi",
+    "avg_rating": 4.39,
+    "rating_count": 271.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 907,
+    "title": "Wizard of Oz, The (1939)",
+    "genres": "Adventure|Children's|Drama|Musical",
+    "avg_rating": 4.38,
+    "rating_count": 1315.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1261,
+    "title": "Great Dictator, The (1940)",
+    "genres": "Comedy",
+    "avg_rating": 4.38,
+    "rating_count": 696.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 3021,
+    "title": "Matewan (1987)",
+    "genres": "Drama",
+    "avg_rating": 4.37,
+    "rating_count": 206.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1220,
+    "title": "Terminator, The (1984)",
+    "genres": "Action|Sci-Fi|Thriller",
+    "avg_rating": 4.36,
+    "rating_count": 1692.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1222,
+    "title": "Glory (1989)",
+    "genres": "Action|Drama|War",
+    "avg_rating": 4.36,
+    "rating_count": 473.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 3088,
+    "title": "Stuart Little (1999)",
+    "genres": "Children's|Comedy",
+    "avg_rating": 4.36,
+    "rating_count": 252.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 592,
+    "title": "Pinocchio (1940)",
+    "genres": "Animation|Children's",
+    "avg_rating": 4.35,
+    "rating_count": 2578.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 2027,
+    "title": "Sleeping Beauty (1959)",
+    "genres": "Animation|Children's|Musical",
+    "avg_rating": 4.34,
+    "rating_count": 2653.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1135,
+    "title": "Faust (1994)",
+    "genres": "Animation|Comedy|Thriller",
+    "avg_rating": 4.34,
+    "rating_count": 1599.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1251,
+    "title": "Fried Green Tomatoes (1991)",
+    "genres": "Drama",
+    "avg_rating": 4.34,
+    "rating_count": 1185.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 3428,
+    "title": "Max Dugan Returns (1983)",
+    "genres": "Comedy",
+    "avg_rating": 4.34,
+    "rating_count": 274.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 3133,
+    "title": "Even Dwarfs Started Small (Auch Zwerge haben klein angefangen) (1971)",
+    "genres": "Drama",
+    "avg_rating": 4.34,
+    "rating_count": 165.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 2323,
+    "title": "Jack Frost (1998)",
+    "genres": "Comedy|Drama",
+    "avg_rating": 4.33,
+    "rating_count": 1152.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1266,
+    "title": "Somewhere in Time (1980)",
+    "genres": "Drama|Romance",
+    "avg_rating": 4.33,
+    "rating_count": 765.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 2857,
+    "title": "Hairspray (1988)",
+    "genres": "Comedy|Drama",
+    "avg_rating": 4.32,
+    "rating_count": 3428.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 2570,
+    "title": "Mommie Dearest (1981)",
+    "genres": "Drama",
+    "avg_rating": 4.32,
+    "rating_count": 2590.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1233,
+    "title": "Day the Earth Stood Still, The (1951)",
+    "genres": "Drama|Sci-Fi",
+    "avg_rating": 4.32,
+    "rating_count": 1049.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1146,
+    "title": "Ruling Class, The (1972)",
+    "genres": "Comedy",
+    "avg_rating": 4.32,
+    "rating_count": 277.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1130,
+    "title": "Curtis's Charm (1995)",
+    "genres": "Comedy|Drama",
+    "avg_rating": 4.32,
+    "rating_count": 216.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 2730,
+    "title": "Problem Child 2 (1991)",
+    "genres": "Comedy",
+    "avg_rating": 4.32,
+    "rating_count": 187.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1283,
+    "title": "Man Who Would Be King, The (1975)",
+    "genres": "Adventure",
+    "avg_rating": 4.31,
+    "rating_count": 541.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 2359,
+    "title": "Faculty, The (1998)",
+    "genres": "Horror|Sci-Fi",
+    "avg_rating": 4.31,
+    "rating_count": 117.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1196,
+    "title": "Alien (1979)",
+    "genres": "Action|Horror|Sci-Fi|Thriller",
+    "avg_rating": 4.3,
+    "rating_count": 2318.0,
+    "explanation": "Popular movie with high ratings"
+  },
+  {
+    "movie_id": 1232,
+    "title": "Chinatown (1974)",
+    "genres": "Film-Noir|Mystery|Thriller",
+    "avg_rating": 4.3,
+    "rating_count": 1001.0,
+    "explanation": "Popular movie with high ratings"
+  }
+]

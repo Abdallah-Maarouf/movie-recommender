@@ -1,0 +1,14 @@
+{
+  "best_strategy": "linear",
+  "best_alpha": 0.9,
+  "performance": {
+    "rmse": 1.0070989694438313,
+    "mae": 0.8014866446144717
+  },
+  "model_info": {
+    "collaborative_rmse": 0.9394730707948115,
+    "content_rmse": 1.2813636267111073,
+    "improvement_over_collaborative": -0.07198279626238467,
+    "improvement_over_content": 0.21404123821684767
+  }
+}
