@@ -14,6 +14,7 @@ from app.models.recommendation import (
     ErrorResponse
 )
 from app.core.ml_models import get_model_manager
+from app.services.recommendation_engine import get_recommendation_engine
 from app.utils.data_loader import get_data_loader
 
 logger = logging.getLogger(__name__)
@@ -33,8 +34,7 @@ router = APIRouter()
 )
 async def generate_recommendations(
     request: RatingRequest,
-    model_manager=Depends(get_model_manager),
-    data_loader=Depends(get_data_loader)
+    model_manager=Depends(get_model_manager)
 ):
     """
     Generate personalized movie recommendations.
@@ -53,33 +53,17 @@ async def generate_recommendations(
     try:
         logger.info(f"Generating recommendations for {len(request.ratings)} ratings using {request.algorithm}")
         
-        # Validate that we have the required models
-        if not model_manager.is_ready():
-            logger.warning("ML models not ready, using fallback recommendations")
-            # For now, we'll implement a simple fallback
-            # This will be properly implemented in task 3.3
-            raise HTTPException(
-                status_code=503,
-                detail={
-                    "error": "MODELS_NOT_READY",
-                    "message": "Recommendation models are not ready. Please try again later.",
-                    "status_code": 503
-                }
-            )
+        # Get recommendation engine
+        engine = await get_recommendation_engine(model_manager)
         
-        # Generate recommendations using the specified algorithm
-        recommendations = await model_manager.generate_recommendations(
+        # Generate recommendations using the engine
+        recommendations = await engine.generate_recommendations(
             ratings=request.ratings,
             algorithm=request.algorithm,
             num_recommendations=request.num_recommendations
         )
         
-        processing_time = time.time() - start_time
-        
-        logger.info(f"Generated {len(recommendations.recommendations)} recommendations in {processing_time:.3f}s")
-        
-        # Add processing time to response
-        recommendations.processing_time = processing_time
+        logger.info(f"Generated {len(recommendations.recommendations)} recommendations in {recommendations.processing_time:.3f}s")
         
         return recommendations
         
@@ -119,8 +103,7 @@ async def generate_recommendations(
 )
 async def update_recommendations(
     request: UpdateRecommendationRequest,
-    model_manager=Depends(get_model_manager),
-    data_loader=Depends(get_data_loader)
+    model_manager=Depends(get_model_manager)
 ):
     """
     Update recommendations with new ratings.
@@ -139,26 +122,18 @@ async def update_recommendations(
     try:
         logger.info(f"Updating recommendations with {len(request.new_ratings)} new ratings")
         
-        # Combine existing and new ratings
-        all_ratings = {**request.existing_ratings, **request.new_ratings}
-        
-        logger.info(f"Total ratings after update: {len(all_ratings)}")
-        
-        # Validate minimum rating requirements
-        if len(all_ratings) < 15:
-            raise ValueError(f"At least 15 total ratings required, got {len(all_ratings)}")
+        # Get recommendation engine
+        engine = await get_recommendation_engine(model_manager)
         
         # Generate updated recommendations
-        recommendations = await model_manager.generate_recommendations(
-            ratings=all_ratings,
+        recommendations = await engine.update_recommendations(
+            existing_ratings=request.existing_ratings,
+            new_ratings=request.new_ratings,
             algorithm=request.algorithm,
             num_recommendations=request.num_recommendations
         )
         
-        processing_time = time.time() - start_time
-        recommendations.processing_time = processing_time
-        
-        logger.info(f"Updated recommendations generated in {processing_time:.3f}s")
+        logger.info(f"Updated recommendations generated in {recommendations.processing_time:.3f}s")
         
         return recommendations
         
@@ -181,6 +156,82 @@ async def update_recommendations(
             detail={
                 "error": "RECOMMENDATION_UPDATE_ERROR",
                 "message": "Failed to update recommendations. Please try again later.",
+                "status_code": 500
+            }
+        )
+
+@router.get(
+    "/recommendations/stats",
+    summary="Get recommendation engine statistics",
+    description="Get performance statistics and status information about the recommendation engine"
+)
+async def get_recommendation_stats(
+    model_manager=Depends(get_model_manager)
+):
+    """
+    Get recommendation engine statistics.
+    
+    Returns performance metrics, cache statistics, and model status information.
+    """
+    try:
+        engine = await get_recommendation_engine(model_manager)
+        stats = engine.get_engine_stats()
+        
+        # Add model validation status
+        model_status = model_manager._validate_models()
+        stats['model_status'] = model_status
+        
+        return {
+            "status": "success",
+            "data": stats,
+            "timestamp": time.time()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting recommendation stats: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "STATS_ERROR",
+                "message": "Failed to retrieve recommendation statistics",
+                "status_code": 500
+            }
+        )
+
+
+@router.post(
+    "/recommendations/cache/clear",
+    summary="Clear recommendation cache",
+    description="Clear the recommendation cache to force fresh recommendations"
+)
+async def clear_recommendation_cache(
+    model_manager=Depends(get_model_manager)
+):
+    """
+    Clear the recommendation cache.
+    
+    Forces all subsequent recommendations to be generated fresh
+    instead of using cached results.
+    """
+    try:
+        engine = await get_recommendation_engine(model_manager)
+        engine.clear_cache()
+        
+        logger.info("Recommendation cache cleared")
+        
+        return {
+            "status": "success",
+            "message": "Recommendation cache cleared successfully",
+            "timestamp": time.time()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error clearing cache: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "CACHE_CLEAR_ERROR",
+                "message": "Failed to clear recommendation cache",
                 "status_code": 500
             }
         )
