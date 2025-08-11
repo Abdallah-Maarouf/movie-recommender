@@ -45,6 +45,18 @@ class Settings(BaseSettings):
     CACHE_TTL: int = Field(default=3600, description="Cache TTL in seconds")
     MAX_CONCURRENT_REQUESTS: int = Field(default=100, description="Maximum concurrent requests")
     
+    # Session Management Configuration
+    SESSION_RATE_LIMIT: int = Field(default=100, description="Max requests per session per hour")
+    SESSION_RATE_WINDOW: int = Field(default=60, description="Rate limit window in minutes")
+    ENABLE_SESSION_ANALYTICS: bool = Field(default=True, description="Enable session analytics")
+    SESSION_CACHE_TTL: int = Field(default=300, description="Session cache TTL in seconds")
+    MAX_RATINGS_PER_SESSION: int = Field(default=1000, description="Maximum ratings per session")
+    
+    # Security Configuration
+    ENABLE_RATE_LIMITING: bool = Field(default=True, description="Enable rate limiting")
+    SUSPICIOUS_PATTERN_DETECTION: bool = Field(default=True, description="Enable suspicious pattern detection")
+    MAX_IDENTICAL_RATINGS_THRESHOLD: int = Field(default=10, description="Max identical ratings before flagging as suspicious")
+    
     # Logging Configuration
     LOG_LEVEL: str = Field(default="INFO", description="Logging level")
     LOG_FORMAT: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

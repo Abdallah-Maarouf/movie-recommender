@@ -163,6 +163,14 @@ class UpdateRecommendationRequest(BaseModel):
         le=100,
         description="Number of recommendations to return"
     )
+    previous_recommendations: Optional[List[Dict]] = Field(
+        None,
+        description="Previous recommendations for delta calculation"
+    )
+    enable_incremental: Optional[bool] = Field(
+        True,
+        description="Enable incremental computation for better performance"
+    )
     
     @field_validator('new_ratings')
     @classmethod
@@ -178,6 +186,42 @@ class UpdateRecommendationRequest(BaseModel):
                 raise ValueError(f"Rating must be between 1.0 and 5.0, got: {rating}")
         
         return v
+    
+    @field_validator('existing_ratings')
+    @classmethod
+    def validate_existing_ratings(cls, v):
+        """Validate existing rating values."""
+        if not v:
+            raise ValueError("Existing ratings are required for updates")
+        
+        for movie_id, rating in v.items():
+            if not isinstance(movie_id, int) or movie_id <= 0:
+                raise ValueError(f"Invalid movie ID: {movie_id}")
+            if not isinstance(rating, (int, float)) or not (1.0 <= rating <= 5.0):
+                raise ValueError(f"Rating must be between 1.0 and 5.0, got: {rating}")
+        
+        return v
+    
+    model_config = ConfigDict(
+        json_schema_extra={
+            "example": {
+                "existing_ratings": {
+                    "1": 4.0,
+                    "2": 3.5,
+                    "3": 5.0,
+                    "10": 2.0,
+                    "15": 4.5
+                },
+                "new_ratings": {
+                    "20": 4.0,
+                    "25": 3.0
+                },
+                "algorithm": "hybrid",
+                "num_recommendations": 20,
+                "enable_incremental": True
+            }
+        }
+    )
 
 
 class ErrorResponse(BaseModel):

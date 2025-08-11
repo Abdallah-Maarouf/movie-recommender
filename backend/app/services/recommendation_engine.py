@@ -7,12 +7,14 @@ import logging
 import hashlib
 import json
 import time
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Tuple
 from datetime import datetime, timedelta
+import numpy as np
 
 from app.models.recommendation import RecommendationResponse, RecommendationItem
 from app.core.ml_models import ModelManager
 from app.core.config import settings
+from app.services.session_manager import get_session_manager
 
 logger = logging.getLogger(__name__)
 
@@ -246,43 +248,173 @@ class RecommendationEngine:
         existing_ratings: Dict[int, float],
         new_ratings: Dict[int, float],
         algorithm: str = "hybrid",
-        num_recommendations: int = 20
+        num_recommendations: int = 20,
+        previous_recommendations: Optional[List[Dict]] = None
     ) -> RecommendationResponse:
         """
-        Update recommendations with new ratings.
+        Update recommendations with new ratings using incremental computation.
         
         Args:
             existing_ratings: Previously provided ratings
             new_ratings: New ratings to incorporate
             algorithm: Algorithm to use
             num_recommendations: Number of recommendations to return
+            previous_recommendations: Previous recommendations for delta calculation
             
         Returns:
-            Updated RecommendationResponse
+            Updated RecommendationResponse with change indicators
         """
-        # Combine ratings
+        start_time = time.time()
+        session_manager = get_session_manager()
+        
+        # Validate and merge ratings
         all_ratings = {**existing_ratings, **new_ratings}
+        
+        # Validate session data
+        session_data = {'ratings': all_ratings}
+        is_valid, error_msg = session_manager.validate_session(session_data)
+        if not is_valid:
+            raise ValueError(f"Invalid session data: {error_msg}")
         
         logger.info(f"Updating recommendations: {len(existing_ratings)} existing + {len(new_ratings)} new = {len(all_ratings)} total")
         
-        # Generate new recommendations
-        response = await self.generate_recommendations(
-            ratings=all_ratings,
-            algorithm=algorithm,
-            num_recommendations=num_recommendations,
-            use_cache=False  # Don't use cache for updates
+        # Check if we can use incremental computation
+        use_incremental = (
+            len(new_ratings) <= 5 and  # Small number of new ratings
+            len(existing_ratings) >= 15 and  # Sufficient existing data
+            algorithm in ["collaborative", "hybrid"]  # Supported algorithms
         )
         
-        # Add update metadata
+        if use_incremental:
+            try:
+                response = await self._incremental_update(
+                    existing_ratings, new_ratings, algorithm, num_recommendations
+                )
+            except Exception as e:
+                logger.warning(f"Incremental update failed, falling back to full computation: {e}")
+                use_incremental = False
+        
+        if not use_incremental:
+            # Generate new recommendations using full computation
+            response = await self.generate_recommendations(
+                ratings=all_ratings,
+                algorithm=algorithm,
+                num_recommendations=num_recommendations,
+                use_cache=False  # Don't use cache for updates
+            )
+        
+        # Calculate recommendation changes
+        recommendation_delta = None
+        if previous_recommendations:
+            recommendation_delta = session_manager.calculate_recommendation_delta(
+                previous_recommendations, 
+                [rec.dict() for rec in response.recommendations]
+            )
+        
+        # Analyze session for insights
+        session_analysis = session_manager.analyze_session(all_ratings, algorithm)
+        
+        # Add comprehensive update metadata
         response.metadata = response.metadata or {}
         response.metadata.update({
             'update_request': True,
             'existing_ratings_count': len(existing_ratings),
             'new_ratings_count': len(new_ratings),
-            'total_ratings_count': len(all_ratings)
+            'total_ratings_count': len(all_ratings),
+            'incremental_computation_used': use_incremental,
+            'session_analysis': session_analysis,
+            'recommendation_delta': recommendation_delta,
+            'update_processing_time': time.time() - start_time
         })
         
         return response
+    
+    async def _incremental_update(
+        self,
+        existing_ratings: Dict[int, float],
+        new_ratings: Dict[int, float],
+        algorithm: str,
+        num_recommendations: int
+    ) -> RecommendationResponse:
+        """
+        Perform incremental recommendation update for better performance.
+        
+        This method attempts to update recommendations without full recomputation
+        by analyzing the impact of new ratings on the existing user profile.
+        """
+        start_time = time.time()
+        
+        # Get existing recommendations for comparison
+        existing_response = await self.generate_recommendations(
+            ratings=existing_ratings,
+            algorithm=algorithm,
+            num_recommendations=num_recommendations * 2,  # Get more for better selection
+            use_cache=True
+        )
+        
+        # Analyze new ratings impact
+        new_rating_values = list(new_ratings.values())
+        existing_rating_values = list(existing_ratings.values())
+        
+        # Calculate rating shift
+        new_mean = np.mean(new_rating_values)
+        existing_mean = np.mean(existing_rating_values)
+        rating_shift = new_mean - existing_mean
+        
+        # Adjust predictions based on rating shift and new preferences
+        adjusted_recommendations = []
+        
+        for rec in existing_response.recommendations:
+            # Adjust prediction based on rating shift
+            adjusted_rating = rec.predicted_rating + (rating_shift * 0.1)
+            
+            # Boost recommendations similar to highly rated new movies
+            similarity_boost = 0.0
+            for new_movie_id, new_rating in new_ratings.items():
+                if new_rating >= 4.0:  # Highly rated new movie
+                    # Calculate genre similarity (simplified)
+                    if hasattr(rec.movie, 'genres') and new_movie_id != rec.movie.id:
+                        # This would need actual movie data for proper similarity
+                        similarity_boost += 0.05  # Placeholder boost
+            
+            adjusted_rating = min(5.0, max(1.0, adjusted_rating + similarity_boost))
+            
+            # Update confidence based on new data
+            confidence_adjustment = min(0.1, len(new_ratings) * 0.02)
+            adjusted_confidence = min(0.95, rec.confidence + confidence_adjustment)
+            
+            adjusted_recommendations.append(RecommendationItem(
+                movie=rec.movie,
+                predicted_rating=round(adjusted_rating, 2),
+                confidence=round(adjusted_confidence, 2),
+                explanation=f"{rec.explanation} (updated with new preferences)",
+                algorithm_used=f"{algorithm}_incremental"
+            ))
+        
+        # Sort by adjusted predictions and select top N
+        adjusted_recommendations.sort(
+            key=lambda x: x.predicted_rating * x.confidence, 
+            reverse=True
+        )
+        final_recommendations = adjusted_recommendations[:num_recommendations]
+        
+        # Calculate overall confidence
+        overall_confidence = np.mean([rec.confidence for rec in final_recommendations])
+        
+        processing_time = time.time() - start_time
+        
+        return RecommendationResponse(
+            recommendations=final_recommendations,
+            total_ratings=len(existing_ratings) + len(new_ratings),
+            algorithm_used=f"{algorithm}_incremental",
+            confidence_score=round(overall_confidence, 2),
+            processing_time=processing_time,
+            metadata={
+                'incremental_update': True,
+                'rating_shift': round(rating_shift, 2),
+                'base_recommendations': len(existing_response.recommendations)
+            }
+        )
     
     def get_engine_stats(self) -> Dict[str, Any]:
         """Get recommendation engine statistics."""

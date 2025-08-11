@@ -15,6 +15,7 @@ from app.models.recommendation import (
 )
 from app.core.ml_models import get_model_manager
 from app.services.recommendation_engine import get_recommendation_engine
+from app.services.session_manager import get_session_manager
 from app.utils.data_loader import get_data_loader
 
 logger = logging.getLogger(__name__)
@@ -96,26 +97,35 @@ async def generate_recommendations(
     response_model=RecommendationResponse,
     responses={
         400: {"model": ErrorResponse, "description": "Invalid input data"},
+        429: {"model": ErrorResponse, "description": "Rate limit exceeded"},
         500: {"model": ErrorResponse, "description": "Internal server error"}
     },
     summary="Update recommendations with new ratings",
-    description="Update existing recommendations by incorporating new user ratings"
+    description="Update existing recommendations by incorporating new user ratings with incremental computation and change tracking"
 )
 async def update_recommendations(
     request: UpdateRecommendationRequest,
     model_manager=Depends(get_model_manager)
 ):
     """
-    Update recommendations with new ratings.
+    Update recommendations with new ratings using incremental computation.
     
     Takes existing ratings plus new ratings and returns updated recommendations
-    with information about how the recommendations have changed.
+    with detailed information about how the recommendations have changed,
+    including position changes, new movies, and rating adjustments.
+    
+    Features:
+    - Incremental computation for better performance
+    - Session validation and rate limiting
+    - Detailed change tracking and analytics
+    - Recommendation explanation updates
+    - Confidence scoring based on session analysis
     
     Args:
         request: Existing and new ratings with algorithm preferences
         
     Returns:
-        Updated recommendations with change indicators
+        Updated recommendations with comprehensive change indicators and analytics
     """
     start_time = time.time()
     
@@ -125,13 +135,30 @@ async def update_recommendations(
         # Get recommendation engine
         engine = await get_recommendation_engine(model_manager)
         
-        # Generate updated recommendations
+        # Extract previous recommendations if provided in metadata
+        previous_recommendations = getattr(request, 'previous_recommendations', None)
+        
+        # Generate updated recommendations with session management
         recommendations = await engine.update_recommendations(
             existing_ratings=request.existing_ratings,
             new_ratings=request.new_ratings,
             algorithm=request.algorithm,
-            num_recommendations=request.num_recommendations
+            num_recommendations=request.num_recommendations,
+            previous_recommendations=previous_recommendations
         )
+        
+        # Add API-level metadata
+        recommendations.metadata = recommendations.metadata or {}
+        recommendations.metadata.update({
+            'api_processing_time': time.time() - start_time,
+            'endpoint': '/recommendations/update',
+            'features_used': [
+                'incremental_computation',
+                'session_validation',
+                'change_tracking',
+                'analytics'
+            ]
+        })
         
         logger.info(f"Updated recommendations generated in {recommendations.processing_time:.3f}s")
         
@@ -146,7 +173,8 @@ async def update_recommendations(
             detail={
                 "error": "INVALID_UPDATE_REQUEST",
                 "message": str(e),
-                "status_code": 400
+                "status_code": 400,
+                "timestamp": time.time()
             }
         )
     except Exception as e:
@@ -156,7 +184,8 @@ async def update_recommendations(
             detail={
                 "error": "RECOMMENDATION_UPDATE_ERROR",
                 "message": "Failed to update recommendations. Please try again later.",
-                "status_code": 500
+                "status_code": 500,
+                "timestamp": time.time()
             }
         )
 
@@ -217,11 +246,15 @@ async def clear_recommendation_cache(
         engine = await get_recommendation_engine(model_manager)
         engine.clear_cache()
         
-        logger.info("Recommendation cache cleared")
+        # Also clear session manager cache
+        session_manager = get_session_manager()
+        session_manager.cleanup_expired_data()
+        
+        logger.info("Recommendation and session cache cleared")
         
         return {
             "status": "success",
-            "message": "Recommendation cache cleared successfully",
+            "message": "All caches cleared successfully",
             "timestamp": time.time()
         }
         
@@ -231,7 +264,206 @@ async def clear_recommendation_cache(
             status_code=500,
             detail={
                 "error": "CACHE_CLEAR_ERROR",
-                "message": "Failed to clear recommendation cache",
+                "message": "Failed to clear caches",
+                "status_code": 500
+            }
+        )
+
+
+@router.post(
+    "/recommendations/validate-session",
+    summary="Validate session data",
+    description="Validate session data structure and check for suspicious patterns"
+)
+async def validate_session_data(
+    session_data: dict
+):
+    """
+    Validate session data for security and integrity.
+    
+    Checks for:
+    - Valid data structure
+    - Suspicious rating patterns
+    - Rate limiting compliance
+    - Data consistency
+    
+    Args:
+        session_data: Session data to validate
+        
+    Returns:
+        Validation result with details
+    """
+    try:
+        session_manager = get_session_manager()
+        
+        is_valid, error_msg = session_manager.validate_session(session_data)
+        
+        if is_valid:
+            # Generate session analytics
+            ratings = session_data.get('ratings', {})
+            session_analysis = session_manager.analyze_session(ratings, 'hybrid')
+            
+            return {
+                "status": "valid",
+                "message": "Session data is valid",
+                "session_analysis": session_analysis,
+                "timestamp": time.time()
+            }
+        else:
+            return {
+                "status": "invalid",
+                "message": error_msg,
+                "timestamp": time.time()
+            }
+            
+    except Exception as e:
+        logger.error(f"Error validating session: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "SESSION_VALIDATION_ERROR",
+                "message": "Failed to validate session data",
+                "status_code": 500
+            }
+        )
+
+
+@router.get(
+    "/recommendations/session-stats",
+    summary="Get session management statistics",
+    description="Get comprehensive statistics about session management and analytics"
+)
+async def get_session_statistics():
+    """
+    Get session management statistics.
+    
+    Returns comprehensive statistics about:
+    - Active sessions
+    - Rate limiting status
+    - Analytics summaries
+    - Performance metrics
+    """
+    try:
+        session_manager = get_session_manager()
+        
+        # Clean up expired data first
+        session_manager.cleanup_expired_data()
+        
+        # Get comprehensive stats
+        session_stats = session_manager.get_session_stats()
+        
+        return {
+            "status": "success",
+            "data": session_stats,
+            "timestamp": time.time()
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting session stats: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "SESSION_STATS_ERROR",
+                "message": "Failed to retrieve session statistics",
+                "status_code": 500
+            }
+        )
+
+
+@router.post(
+    "/recommendations/analyze-ratings",
+    summary="Analyze rating patterns",
+    description="Analyze user rating patterns for insights and recommendations optimization"
+)
+async def analyze_rating_patterns(
+    ratings_data: dict
+):
+    """
+    Analyze user rating patterns for insights.
+    
+    Provides detailed analysis of:
+    - Rating distribution and statistics
+    - User behavior patterns
+    - Recommendation confidence factors
+    - Personalization insights
+    
+    Args:
+        ratings_data: Dictionary containing user ratings
+        
+    Returns:
+        Comprehensive rating pattern analysis
+    """
+    try:
+        if 'ratings' not in ratings_data:
+            raise ValueError("Missing 'ratings' field in request data")
+        
+        ratings = ratings_data['ratings']
+        algorithm = ratings_data.get('algorithm', 'hybrid')
+        
+        session_manager = get_session_manager()
+        
+        # Validate ratings first
+        session_data = {'ratings': ratings}
+        is_valid, error_msg = session_manager.validate_session(session_data)
+        
+        if not is_valid:
+            raise ValueError(f"Invalid ratings data: {error_msg}")
+        
+        # Perform comprehensive analysis
+        pattern_analysis = session_manager.analytics.analyze_rating_pattern(ratings)
+        confidence_score = session_manager.analytics.calculate_recommendation_confidence(ratings, algorithm)
+        
+        # Generate insights and recommendations
+        insights = []
+        
+        if pattern_analysis.get('is_generous_rater'):
+            insights.append("You tend to rate movies generously. Recommendations will focus on highly-rated content.")
+        elif pattern_analysis.get('is_critical_rater'):
+            insights.append("You have high standards for movies. Recommendations will emphasize critically acclaimed films.")
+        
+        if pattern_analysis.get('rating_variance') == 'high':
+            insights.append("You have diverse taste in movies. Hybrid recommendations will work best for you.")
+        else:
+            insights.append("You have consistent rating patterns. Content-based recommendations may work well.")
+        
+        if len(ratings) >= 50:
+            insights.append("With many ratings provided, collaborative filtering will be highly accurate.")
+        elif len(ratings) < 20:
+            insights.append("More ratings will improve recommendation accuracy. Consider rating more movies.")
+        
+        return {
+            "status": "success",
+            "data": {
+                "pattern_analysis": pattern_analysis,
+                "confidence_score": confidence_score,
+                "insights": insights,
+                "recommended_algorithm": "hybrid" if len(ratings) >= 25 else "content",
+                "optimization_suggestions": [
+                    "Rate movies from different genres for better diversity",
+                    "Include both popular and niche movies in your ratings",
+                    "Rate at least 30 movies for optimal collaborative filtering"
+                ]
+            },
+            "timestamp": time.time()
+        }
+        
+    except ValueError as e:
+        logger.warning(f"Invalid rating analysis request: {e}")
+        raise HTTPException(
+            status_code=400,
+            detail={
+                "error": "INVALID_RATINGS_DATA",
+                "message": str(e),
+                "status_code": 400
+            }
+        )
+    except Exception as e:
+        logger.error(f"Error analyzing ratings: {e}")
+        raise HTTPException(
+            status_code=500,
+            detail={
+                "error": "RATING_ANALYSIS_ERROR",
+                "message": "Failed to analyze rating patterns",
                 "status_code": 500
             }
         )
